@@ -1,0 +1,18 @@
+---
+techs:
+  - JavaScript|SiJavascript
+  - TypeScript|SiTypescript
+  - React|SiReact
+  - Redux|SiRedux
+  - NextJS|SiNextdotjs
+  - NodeJS|SiNodedotjs
+  - NestJS|SiNestjs
+  - AWS|SiAmazonaws
+  - Serverless|SiServerless
+  - Firebase|SiFirebase
+  - GitHub Actions|SiGithubactions
+  - Git|SiGit
+  - ESLint|SiEslint
+  - Prettier|SiPrettier
+  - Vim|SiVim
+---
