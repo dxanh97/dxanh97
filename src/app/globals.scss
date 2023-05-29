@@ -1,0 +1,16 @@
+:root {
+  --color-primary: #271297;
+  --color-background: #edecf8;
+  --color-caption: #9791c2;
+}
+
+body {
+  margin: -10px;
+  background: var(--color-background);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 24px;
+  * {
+    color: var(--color-primary);
+  }
+}

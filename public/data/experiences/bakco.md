@@ -1,8 +1,11 @@
 ---
+  order: 1
   role: Full-Stack Developer
   company: Bakco
   companyURL: https://www.bakco.com.vn/
-  period: November 2017 — July 2018 & July 2019 — September 2020
+  period:
+    - November 2017
+    - September 2020
 ---
 
 <p>

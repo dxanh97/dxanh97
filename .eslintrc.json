@@ -23,6 +23,9 @@
       }
     }
   ],
+  "ignorePatterns": [
+    "next.config.js"
+  ],
   "rules": {
     "react/function-component-definition": [
       2,
