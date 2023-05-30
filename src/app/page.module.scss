@@ -16,6 +16,12 @@
       @media (max-width: 600px) {
         width: 100%;
         box-sizing: border-box;
+        padding: 0 20px;
+      }
+      & > div.desktop {
+        @media (max-width: 600px) {
+          display: none;
+        }
       }
     }
     & > div:last-child {
@@ -25,6 +31,13 @@
         flex: unset;
         width: 100%;
         box-sizing: border-box;
+        padding: 0 20px;
+      }
+      & > div.mobile {
+        display: none;
+        @media (max-width: 600px) {
+          display: initial;
+        }
       }
     }
   }

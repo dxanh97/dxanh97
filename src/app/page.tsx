@@ -22,13 +22,15 @@ const Home: React.FC = () => {
             introduction={introduction}
           />
           <Techs techList={techs} />
-          {/* desktop */}
-          <Interests interestList={interests} />
+          <div className={css['desktop']}>
+            <Interests interestList={interests} />
+          </div>
         </div>
         <div>
           <Experiences experienceList={experiences} />
-          {/* mobile */}
-          <Interests interestList={interests} />
+          <div className={css['mobile']}>
+            <Interests interestList={interests} />
+          </div>
         </div>
       </div>
     </main>
