@@ -1,6 +1,6 @@
-.wrapper {
+div.wrapper {
   display: flex;
-  .box {
+  div.box {
     padding: 10px;
     padding-left: 4px;
     border: 4px solid var(--color-primary);
@@ -15,7 +15,7 @@
       border-left: 52px solid transparent;
       width: 0;
     }
-    .content {
+    div.content {
       margin-left: -14px;
       padding: 4px;
       padding-right: 0;
@@ -30,14 +30,14 @@
         width: 0;
         z-index: 2;
       }
-      .name {
+      h1.name {
         text-transform: lowercase;
         font-size: 80px;
         line-height: 68px;
         font-weight: 300;
         margin: 4px 0 12px;
       }
-      .title {
+      div.title {
         margin-left: -16px;
         margin-bottom: 16px;
         text-transform: uppercase;
@@ -48,7 +48,7 @@
           color: var(--color-background);
         }
       }
-      .contact-wrapper {
+      div.contact-wrapper {
         margin-bottom: 4px;
         a {
           margin-right: 24px;

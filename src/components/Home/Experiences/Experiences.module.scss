@@ -1,15 +1,9 @@
-.wrapper {
+div.wrapper {
   margin-bottom: 40px;
-}
-.company-role {
-  margin-bottom: 8px;
-  b {
-    font-weight: 500;
+  p.company-role {
+    margin-bottom: 8px;
   }
-}
-.period {
-  color: var(--color-caption);
-}
-.detail-section {
-  margin: 16px 0;
+  span.period {
+    color: var(--color-caption);
+  }
 }

@@ -7,10 +7,10 @@ const Section: React.FC<
     header: string;
   }>
 > = ({ header, children }) => (
-  <>
-    <h3 className={css['header']}>{header}</h3>
+  <div className={css['wrapper']}>
+    <h3>{header}</h3>
     {children}
-  </>
+  </div>
 );
 
 export default Section;
