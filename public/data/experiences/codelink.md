@@ -2,7 +2,7 @@
   order: 2
   role: Full-Stack Developer
   company: CodeLink
-  companyURL: https://www.codelink.io/
+  companyUrl: https://www.codelink.io/
   period:
     - October 2020
 ---

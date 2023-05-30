@@ -2,7 +2,7 @@
   order: 0
   role: Full-Stack Developer
   company: HiSoft
-  companyURL: https://www.facebook.com/hisoftcompany/
+  companyUrl: https://www.facebook.com/hisoftcompany/
   period:
   - March 2017
   - September 2017

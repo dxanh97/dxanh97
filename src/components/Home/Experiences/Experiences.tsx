@@ -14,25 +14,27 @@ const Experiences: React.FC<{
   }>;
 }> = ({ experienceList }) => (
   <Section header="Experiences">
-    {experienceList.map((experience) => (
-      <div key={experience.period[0]} className={css['wrapper']}>
-        <p className={css['company-role']}>
-          <b>{experience.role}</b>
-          &nbsp;at&nbsp;
-          <b>
-            <a href={experience.companyUrl} target="_blank" rel="noreferrer">
-              {experience.company}
-            </a>
-          </b>
-        </p>
-        <span className={css['period']}>{`${experience.period[0]} — ${
-          experience.period[1] ?? 'Present'
-        }`}</span>
-        <div className={css['brief']}>
-          <div dangerouslySetInnerHTML={{ __html: experience.brief }} />
+    {experienceList.map((experience) => {
+      const { role, period, company, companyUrl, brief } = experience;
+      const [from, to = 'Present'] = period;
+      return (
+        <div key={company} className={css['wrapper']}>
+          <p className={css['company-role']}>
+            <b>{role}</b>
+            &nbsp;at&nbsp;
+            <b>
+              <a href={companyUrl} target="_blank" rel="noreferrer">
+                {company}
+              </a>
+            </b>
+          </p>
+          <span className={css['period']}>{`${from} — ${to}`}</span>
+          <div className={css['brief']}>
+            <div dangerouslySetInnerHTML={{ __html: brief }} />
+          </div>
         </div>
-      </div>
-    ))}
+      );
+    })}
   </Section>
 );
 
