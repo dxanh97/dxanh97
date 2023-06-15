@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+'use client';
+
 import React, { PropsWithChildren } from 'react';
 import './globals.scss';
 import { Space_Grotesk } from 'next/font/google';
 
-const space_grotesk = Space_Grotesk({ subsets: ['latin'] });
+import Cursor from '../components/@Shared/Cursor/Cursor';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => (
   <html lang="en">
-    <body className={space_grotesk.className}>{children}</body>
+    <body className={spaceGrotesk.className}>{children}</body>
+    <Cursor />
   </html>
 );
 

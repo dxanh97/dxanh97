@@ -1,0 +1,17 @@
+.cursor-wrapper {
+  pointer-events: none;
+  @media (pointer: coarse) {
+    pointer-events: unset;
+    opacity: 0;
+  }
+}
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  mix-blend-mode: exclusion;
+  z-index: 1000;
+  circle {
+    fill: var(--color-background);
+  }
+}
