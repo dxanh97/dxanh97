@@ -9,6 +9,11 @@ body {
   font-weight: 300;
   font-size: 20px;
   line-height: 24px;
+  margin: 0;
+  div.scroll-wrapper {
+    height: 100vh;
+    overflow: auto;
+  }
   cursor: none;
   * {
     color: var(--color-primary);

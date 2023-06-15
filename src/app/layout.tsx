@@ -10,7 +10,9 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => (
   <html lang="en">
-    <body className={spaceGrotesk.className}>{children}</body>
+    <body className={spaceGrotesk.className}>
+      <div className="scroll-wrapper">{children}</div>
+    </body>
     <Cursor />
   </html>
 );
