@@ -1,5 +1,6 @@
-/* eslint-disable react/no-danger */
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { FiGithub, FiMail, FiLinkedin } from 'react-icons/fi';
 
 import css from './About.module.scss';
@@ -18,6 +19,14 @@ const About: React.FC<{
     { href: github, icon: <FiGithub /> },
     { href: linkedin, icon: <FiLinkedin /> },
   ];
+
+  useEffect(() => {
+    document
+      .getElementById('yoe')
+      ?.appendChild(
+        document.createTextNode(`${new Date().getFullYear() - 2018}`),
+      );
+  }, []);
 
   return (
     <>

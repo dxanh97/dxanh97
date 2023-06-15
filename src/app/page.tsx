@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 
 import { About, Experiences, Interests, Techs } from '../components/Home';
 import getData from '../utils/data';
@@ -11,6 +12,9 @@ const Home: React.FC = () => {
 
   return (
     <main className={css['wrapper']}>
+      <Head>
+        <title>{'<dxanh97 />'}</title>
+      </Head>
       <div className={css['information-wrapper']}>
         <div>
           <About
