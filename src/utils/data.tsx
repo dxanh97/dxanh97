@@ -48,7 +48,7 @@ const getExperiences = (): Array<{
       const { role, company, companyUrl, period, order } = data;
       return { role, company, companyUrl, period, brief: content, order };
     })
-    .sort((a, b) => a.order - b.order);
+    .sort((a, b) => b.order - a.order);
 };
 
 const getData = () => {
