@@ -1,6 +1,7 @@
 ---
 interests:
   - Pool|RiBilliardsLine
+  - Poker|TbPokerChip
   - Chess|TbChessKing
   - Football|TbSoccerField
   - Code|TbTerminal2
