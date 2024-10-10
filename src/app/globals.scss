@@ -3,6 +3,13 @@
   --color-background: #edecf8;
   --color-caption: #9791c2;
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #ffffff;
+    --color-background: #242424;
+    --color-caption: #b8b8b8;
+  }
+}
 
 body {
   background: var(--color-background);
