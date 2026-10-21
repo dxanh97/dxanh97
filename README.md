@@ -45,6 +45,7 @@ A terminal-style theme: monospace type, shell-prompt section headings and a `git
 - **Font:** [Space Mono](https://fonts.google.com/specimen/Space+Mono) via `@fontsource/space-mono`. The latin, latin-ext and Vietnamese subsets are preloaded because the name needs all three.
 - **Styles:** tokens, base styles and the shared `.prompt` style in `src/styles/global.scss`; print (A4 CV) rules in `src/styles/print.scss`; everything else is scoped inside each component in `src/components/`.
 - **Lowercase is CSS only** (`text-transform`). Content stays properly capitalised for search engines, screen readers and print.
+- **Load animation:** the page starts blank with a blinking caret, types a `curl` command (`command` in `src/pages/index.astro`), waits, clears it and the caret, then streams the page in word by word, each word fading in, like an LLM response (`src/components/Stream.astro`). Content keeps its space while hidden, so nothing shifts. Any key, click, scroll or touch skips to the full page. It never runs with reduced motion or without JavaScript, and the page shows anyway if the script has not started within 3s. The constants at the top of the script set the timing.
 - **Section headings** are `<h2>` prompts whose visible text is decorative (`aria-hidden`); screen readers hear the plain section name.
 
 ## Deployment

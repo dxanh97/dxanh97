@@ -4,6 +4,7 @@ import '@fontsource/space-mono/700.css';
 import '@/styles/global.scss';
 import '@/styles/print.scss';
 import Cursor from '@/components/Cursor.astro';
+import Stream from '@/components/Stream.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
 import latin from '@fontsource/space-mono/files/space-mono-latin-400-normal.woff2?url';
 import latinExt from '@fontsource/space-mono/files/space-mono-latin-ext-400-normal.woff2?url';
@@ -57,10 +58,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         // storage unavailable; follow the system theme
       }
     </script>
+    <script is:inline>
+      // Hide the page until Stream.astro prints it. Never with reduced
+      // motion, and show everything if the stream has not started in 3s.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const root = document.documentElement;
+        root.dataset.boot = '';
+        setTimeout(function () {
+          if (root.dataset.boot === '') delete root.dataset.boot;
+        }, 3000);
+      }
+    </script>
   </head>
   <body>
     <Cursor />
     <ThemeToggle />
     <slot />
+    <Stream />
   </body>
 </html>

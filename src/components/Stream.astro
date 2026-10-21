@@ -1,0 +1,215 @@
+---
+// Streams the page in on load, word by word like an LLM response, behind a
+// caret. BaseLayout's head script sets `data-boot` on <html> before the first
+// paint; this script takes over by setting it to `streaming`.
+---
+
+<svg
+  class="caret"
+  viewBox="0 0 1 1"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <rect width="1" height="1" fill="currentColor"></rect>
+</svg>
+
+<script>
+  const DELAY = 1000; // ms of blank page with a blinking caret
+  const TYPE = 60; // average ms per character of the `data-type` command
+  const WAIT = 2000; // ms between the command and its output
+  const DURATION = 5000; // ms to stream the rest of the page
+  const FADE = 400; // ms each word fades in for; matches the CSS transition
+  const GLIDE = 40; // ms time constant of the caret trailing the text
+
+  const root = document.documentElement;
+  const stream = document.querySelector<HTMLElement>('[data-stream]');
+  const caret = document.querySelector<SVGSVGElement>('.caret');
+
+  // An empty `data-boot` means the head script's fallback has not fired yet.
+  if (root.dataset.boot === '' && stream && caret) {
+    root.dataset.boot = 'streaming';
+
+    // Text inside `data-type` is typed a character at a time; everything
+    // else streams a word at a time. Icons count as words.
+    type Token = { el: Element; kind: 'element' | 'word' | 'char'; at: number };
+    const tokens: Token[] = [];
+    const words: HTMLSpanElement[] = [];
+    const walk = (el: Element, typed: boolean) => {
+      const isIcon = el instanceof SVGElement;
+      tokens.push({ el, kind: isIcon ? 'word' : 'element', at: 0 });
+      if (isIcon) return;
+      for (const node of [...el.childNodes]) {
+        if (node instanceof Element) {
+          if (node.classList.contains('sr-only')) continue;
+          if (!node.getClientRects().length) continue;
+          walk(node, typed || node.hasAttribute('data-type'));
+        } else if (node instanceof Text && node.data.trim()) {
+          // Split before each run of spaces so the caret sits on the word,
+          // and after hyphens and slashes so no word wraps across lines (a
+          // fading word is measured alone, and a wrapped one is huge).
+          const parts = typed
+            ? [...node.data]
+            : node.data.split(/(?=\s+\S)|(?<=[-/])(?=\S)/);
+          const spans = parts.map((part) => {
+            const span = document.createElement('span');
+            span.textContent = part;
+            tokens.push({ el: span, kind: typed ? 'char' : 'word', at: 0 });
+            words.push(span);
+            return span;
+          });
+          node.replaceWith(...spans);
+        }
+      }
+    };
+    walk(stream, false);
+
+    // Schedule each token in ms from the start. Words before the command
+    // (its prompt) appear at once; elements appear with their next token.
+    const lastChar = tokens.findLastIndex((token) => token.kind === 'char');
+    const streamed = tokens.filter(
+      (token, i) => token.kind === 'word' && i > lastChar,
+    ).length;
+    let time = DELAY;
+    let waited = lastChar < 0;
+    tokens.forEach((token, i) => {
+      if (token.kind === 'char') {
+        time += TYPE * (0.5 + Math.random());
+      } else if (token.kind === 'word' && i > lastChar) {
+        if (!waited) time += WAIT;
+        waited = true;
+        time += DURATION / streamed;
+      }
+      token.at = time;
+    });
+    for (let i = tokens.length - 2; i >= 0; i--) {
+      if (tokens[i].kind === 'element') tokens[i].at = tokens[i + 1].at;
+    }
+
+    // `data-clear` (the command line) and the caret go when the rest starts.
+    const clear = stream.querySelector('[data-clear]');
+    const firstStreamed = tokens.findIndex(
+      (token, i) => token.kind === 'word' && i > lastChar,
+    );
+    const first = tokens.find((token) => token.kind !== 'element')?.el;
+    let anchor: Element | undefined;
+    let lastPrint = -Infinity;
+    let next = 0;
+    let start = 0;
+    let frame = 0;
+
+    // The caret glides after the text, easing out like Cursor.astro's ring,
+    // and moves by transform so it never shifts the layout.
+    let caretX = 0;
+    let caretY = 0;
+    let caretSize = 0;
+    let lastFrame = 0;
+    const placeCaret = (now: number) => {
+      const el = anchor ?? first;
+      const rects = el?.getClientRects();
+      if (!caret.isConnected || !el || !rects?.length) return;
+      const rect = anchor ? rects[rects.length - 1] : rects[0];
+      const size = parseFloat(getComputedStyle(el).fontSize);
+      const x = (anchor ? rect.right + size * 0.08 : rect.left) + scrollX;
+      const y = rect.top + (rect.height - size * 0.82) / 2 + scrollY;
+      const k = caretSize ? 1 - Math.exp(-(now - lastFrame) / GLIDE) : 1;
+      lastFrame = now;
+      caretX += (x - caretX) * k;
+      caretY += (y - caretY) * k;
+      caretSize += (size - caretSize) * k;
+      caret.style.fontSize = `${caretSize}px`;
+      caret.style.transform = `translate(${caretX}px,${caretY}px)`;
+    };
+
+    const events = ['keydown', 'pointerdown', 'wheel', 'touchstart'];
+
+    const finish = () => {
+      cancelAnimationFrame(frame);
+      for (const type of events) removeEventListener(type, finish);
+      delete root.dataset.boot;
+      for (const { el } of tokens) {
+        el.classList.remove('printed');
+        if (!el.classList.length) el.removeAttribute('class');
+      }
+      const parents = new Set(words.map((span) => span.parentNode));
+      for (const span of words) span.replaceWith(...span.childNodes);
+      parents.forEach((parent) => parent?.normalize());
+    };
+
+    const tick = (now: number) => {
+      start ||= now;
+      const elapsed = now - start;
+      while (next < tokens.length && tokens[next].at <= elapsed) {
+        if (next === firstStreamed) {
+          clear?.remove();
+          caret.remove();
+        }
+        const { el, kind } = tokens[next++];
+        el.classList.add('printed');
+        if (kind !== 'element') {
+          anchor = el;
+          lastPrint = elapsed;
+        }
+      }
+      // Solid while printing, blinking while it waits.
+      caret.classList.toggle('is-typing', elapsed - lastPrint < 300);
+      placeCaret(now);
+      // Let the last words finish fading before cleaning up.
+      if (next < tokens.length || elapsed < lastPrint + FADE) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        finish();
+      }
+    };
+
+    // Any input skips straight to the full page.
+    for (const type of events) {
+      addEventListener(type, finish, { passive: true });
+    }
+    frame = requestAnimationFrame(tick);
+  }
+</script>
+
+<style lang="scss">
+  .caret {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 0.5em;
+    height: 0.82em;
+    color: var(--accent);
+    pointer-events: none;
+    will-change: transform;
+    animation: blink 1.1s steps(1) infinite;
+    &:global(.is-typing) {
+      animation: none;
+    }
+    :global(:root[data-boot='streaming']) & {
+      display: block;
+    }
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  /* Until it is printed, everything keeps its space but stays invisible.
+     Opacity, unlike visibility, leaves it readable by screen readers; it
+     works per element because parents always print before their children.
+     Icon parts follow their <svg>. */
+  @media screen {
+    :global(:root[data-boot] [data-stream] :not(svg *, .printed)),
+    :global(:root[data-boot] .theme-toggle) {
+      opacity: 0;
+    }
+    /* Streamed words fade in; the typed command appears key by key. */
+    :global(:root[data-boot] [data-stream] :not(svg *)) {
+      transition: opacity 0.4s ease-out;
+    }
+    :global(:root[data-boot] [data-stream] [data-type] *) {
+      transition: none;
+    }
+  }
+</style>

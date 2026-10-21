@@ -6,10 +6,15 @@ import Interests from '@/components/Interests.astro';
 import Techs from '@/components/Techs.astro';
 import interests from '@/data/interests';
 import techs from '@/data/techs';
+
+const command = 'curl https://dxanh97.dev';
 ---
 
 <BaseLayout>
-  <div class="wrap">
+  <div class="wrap" data-stream>
+    <p class="prompt command" data-clear aria-hidden="true">
+      <span class="tilde">~</span> $ <span data-type>{command}</span>
+    </p>
     <aside>
       <About />
       <Techs techList={techs} />
@@ -23,16 +28,20 @@ import techs from '@/data/techs';
 
 <style lang="scss">
   .wrap {
+    --pad-y: 64px;
+    --pad-x: 40px;
+    position: relative;
     display: grid;
     grid-template-columns: 400px 1fr;
     gap: 72px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 64px 40px;
+    padding: var(--pad-y) var(--pad-x);
     @media (max-width: 900px) {
+      --pad-y: 40px;
+      --pad-x: 20px;
       grid-template-columns: minmax(0, 1fr);
       gap: 16px;
-      padding: 40px 20px;
     }
   }
   /* Sticky only where the whole column fits on screen; otherwise its
@@ -42,6 +51,19 @@ import techs from '@/data/techs';
     @media (min-width: 901px) and (min-height: 1080px) {
       position: sticky;
       top: 48px;
+    }
+  }
+  /* Only part of the load animation (Stream.astro), which clears it before
+     the page streams in. It sits on the first line, out of the flow, so
+     clearing it shifts nothing. */
+  .command {
+    display: none;
+    position: absolute;
+    top: var(--pad-y);
+    left: var(--pad-x);
+    margin: 0;
+    :global(:root[data-boot]) & {
+      display: block;
     }
   }
   main {
