@@ -53,8 +53,8 @@ const groups = techCategories
   .root {
     margin: 0;
     color: var(--accent);
-    font-size: 13px;
-    line-height: 24px;
+    font-size: 16.25px;
+    line-height: 30px;
   }
   /* Tree branches are drawn with borders rather than box-drawing
      characters so they line up exactly with the rows. */
@@ -62,8 +62,8 @@ const groups = techCategories
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 13px;
-    line-height: 24px;
+    font-size: 16.25px;
+    line-height: 30px;
     li {
       position: relative;
       padding: 1px 0 1px 28px;
@@ -77,14 +77,14 @@ const groups = techCategories
       }
       &:last-child::before {
         bottom: auto;
-        height: 13px;
+        height: 16px;
       }
       &::after {
         content: '';
         position: absolute;
         left: 4px;
-        top: 13px;
-        width: 16px;
+        top: 16px;
+        width: 20px;
         border-top: 1px solid var(--muted);
       }
     }

@@ -25,17 +25,12 @@ const techs: Array<{ name: string; icon: string; category: TechCategory }> = [
   { name: 'NodeJS', icon: 'simple-icons:nodedotjs', category: 'backend' },
   { name: 'NestJS', icon: 'simple-icons:nestjs', category: 'backend' },
   { name: 'AWS', icon: 'simple-icons:amazonaws', category: 'cloud' },
-  { name: 'Serverless', icon: 'simple-icons:serverless', category: 'cloud' },
   { name: 'Firebase', icon: 'simple-icons:firebase', category: 'cloud' },
-  {
-    name: 'GitHub Actions',
-    icon: 'simple-icons:githubactions',
-    category: 'tooling',
-  },
   { name: 'Git', icon: 'simple-icons:git', category: 'tooling' },
   { name: 'ESLint', icon: 'simple-icons:eslint', category: 'tooling' },
   { name: 'Prettier', icon: 'simple-icons:prettier', category: 'tooling' },
   { name: 'Vim', icon: 'simple-icons:vim', category: 'tooling' },
+  { name: 'Claude', icon: 'simple-icons:claude', category: 'tooling' },
 ];
 
 export default techs;
