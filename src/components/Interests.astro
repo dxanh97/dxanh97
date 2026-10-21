@@ -11,14 +11,12 @@ const { interestList } = Astro.props;
 ---
 
 <Section header="Interests">
-  {
-    interestList.map((interest) => (
-      <div class="wrapper">
-        <Icon name={interest.icon} width="1em" height="1em" aria-hidden="true" />
-        <span>{interest.name}</span>
-      </div>
-    ))
-  }
+  {interestList.map((interest) => (
+    <div class="wrapper">
+      <Icon name={interest.icon} width="1em" height="1em" aria-hidden="true" />
+      <span>{interest.name}</span>
+    </div>
+  ))}
 </Section>
 
 <style lang="scss">

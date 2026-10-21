@@ -11,16 +11,14 @@ const { techList } = Astro.props;
 ---
 
 <Section header="Tech">
-  {
-    techList.map((tech) => (
-      <div class="tag">
-        <div>
-          <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
-          <span>{tech.name}</span>
-        </div>
+  {techList.map((tech) => (
+    <div class="tag">
+      <div>
+        <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
+        <span>{tech.name}</span>
       </div>
-    ))
-  }
+    </div>
+  ))}
 </Section>
 
 <style lang="scss">

@@ -10,9 +10,19 @@ const { name, role, email, github, linkedin, careerStart } = profile.data;
 const { Content } = await render(profile);
 
 const contactList = [
-  { href: `mailto:${email}`, icon: 'feather:mail', label: 'Email', external: false },
+  {
+    href: `mailto:${email}`,
+    icon: 'feather:mail',
+    label: 'Email',
+    external: false,
+  },
   { href: github, icon: 'feather:github', label: 'GitHub', external: true },
-  { href: linkedin, icon: 'feather:linkedin', label: 'LinkedIn', external: true },
+  {
+    href: linkedin,
+    icon: 'feather:linkedin',
+    label: 'LinkedIn',
+    external: true,
+  },
 ];
 
 const printContact = [
@@ -25,22 +35,41 @@ const printContact = [
   <div class="box">
     <div class="content">
       <h1 class="name">
-        {name.split(' ').map((x) => <Fragment>{x}<br /></Fragment>)}
+        {name.split(' ').map((x) => (
+          <Fragment>
+            {x}
+            <br />
+          </Fragment>
+        ))}
       </h1>
-      <div class="title"><span>{role}</span></div>
+      <div class="title">
+        <span>{role}</span>
+      </div>
       <div class="contact-wrapper">
-        {
-          contactList.map((contact) => (
-            <a href={contact.href} aria-label={contact.label} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer' : undefined}><Icon name={contact.icon} width="1em" height="1em" aria-hidden="true" /></a>
-          ))
-        }
+        {contactList.map((contact) => (
+          <a
+            href={contact.href}
+            aria-label={contact.label}
+            target={contact.external ? '_blank' : undefined}
+            rel={contact.external ? 'noreferrer' : undefined}
+          >
+            <Icon
+              name={contact.icon}
+              width="1em"
+              height="1em"
+              aria-hidden="true"
+            />
+          </a>
+        ))}
       </div>
       <p class="print-contact">{printContact}</p>
     </div>
   </div>
 </div>
 <Section header="About">
-  <div><Content yearsOfExperience={new Date().getFullYear() - careerStart} /></div>
+  <div>
+    <Content yearsOfExperience={new Date().getFullYear() - careerStart} />
+  </div>
 </Section>
 
 <style lang="scss">

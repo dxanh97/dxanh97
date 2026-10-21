@@ -3,8 +3,20 @@ import { Icon } from 'astro-icon/components';
 ---
 
 <button type="button" class="theme-toggle" aria-label="Switch theme">
-  <Icon class="moon" name="feather:moon" width="1em" height="1em" aria-hidden="true" />
-  <Icon class="sun" name="feather:sun" width="1em" height="1em" aria-hidden="true" />
+  <Icon
+    class="moon"
+    name="feather:moon"
+    width="1em"
+    height="1em"
+    aria-hidden="true"
+  />
+  <Icon
+    class="sun"
+    name="feather:sun"
+    width="1em"
+    height="1em"
+    aria-hidden="true"
+  />
 </button>
 
 <script>
@@ -31,7 +43,9 @@ import { Icon } from 'astro-icon/components';
     root.dataset.theme = next;
     try {
       localStorage.theme = next;
-    } catch {}
+    } catch {
+      // storage unavailable; the choice just won't persist
+    }
     document
       .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
       .forEach((meta) => (meta.content = colors[next]));

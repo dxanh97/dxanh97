@@ -27,24 +27,34 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#edecf8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#16132e" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#edecf8"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#16132e"
+      media="(prefers-color-scheme: dark)"
+    />
     {[latin, latinExt, vietnamese].map((href) => (
       <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
     ))}
     <script is:inline>
       try {
-        var theme = localStorage.theme;
+        const theme = localStorage.theme;
         if (theme === 'light' || theme === 'dark') {
           document.documentElement.dataset.theme = theme;
-          var color = theme === 'dark' ? '#16132e' : '#edecf8';
+          const color = theme === 'dark' ? '#16132e' : '#edecf8';
           document
             .querySelectorAll('meta[name="theme-color"]')
             .forEach(function (meta) {
               meta.content = color;
             });
         }
-      } catch (e) {}
+      } catch {
+        // storage unavailable; follow the system theme
+      }
     </script>
   </head>
   <body>
