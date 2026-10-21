@@ -15,10 +15,10 @@
 </svg>
 
 <script>
-  const DELAY = 1000; // ms of blank page with a blinking caret
-  const TYPE = 60; // average ms per character of the `data-type` command
-  const WAIT = 2000; // ms between the command and its output
-  const DURATION = 5000; // ms to stream the rest of the page
+  const DELAY = 500; // ms of blank page with a blinking caret
+  const TYPE = 30; // average ms per character of the `data-type` command
+  const WAIT = 1000; // ms between the command and its output
+  const DURATION = 3000; // ms to stream the rest of the page
   const FADE = 400; // ms each word fades in for; matches the CSS transition
   const GLIDE = 40; // ms time constant of the caret trailing the text
 
@@ -201,11 +201,13 @@
      Icon parts follow their <svg>. */
   @media screen {
     :global(:root[data-boot] [data-stream] :not(svg *, .printed)),
-    :global(:root[data-boot] .theme-toggle) {
+    :global(:root[data-boot]:has([data-clear]) .theme-toggle) {
       opacity: 0;
     }
-    /* Streamed words fade in; the typed command appears key by key. */
-    :global(:root[data-boot] [data-stream] :not(svg *)) {
+    /* Streamed words fade in, and the theme toggle with the first of them
+       (once the command is cleared); the command appears key by key. */
+    :global(:root[data-boot] [data-stream] :not(svg *)),
+    :global(:root[data-boot] .theme-toggle) {
       transition: opacity 0.4s ease-out;
     }
     :global(:root[data-boot] [data-stream] [data-type] *) {

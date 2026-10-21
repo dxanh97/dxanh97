@@ -18,7 +18,9 @@ const command = 'curl https://dxanh97.dev';
     <aside>
       <About />
       <Techs techList={techs} />
-      <Interests interestList={interests} />
+      <div class="interests">
+        <Interests interestList={interests} />
+      </div>
     </aside>
     <main>
       <Experiences />
@@ -41,7 +43,7 @@ const command = 'curl https://dxanh97.dev';
       --pad-y: 40px;
       --pad-x: 20px;
       grid-template-columns: minmax(0, 1fr);
-      gap: 16px;
+      gap: 0;
     }
   }
   /* Sticky only where the whole column fits on screen; otherwise its
@@ -51,6 +53,15 @@ const command = 'curl https://dxanh97.dev';
     @media (min-width: 901px) and (min-height: 1080px) {
       position: sticky;
       top: 48px;
+    }
+    /* In one column, interests go below the career log. */
+    @media (max-width: 900px) {
+      display: contents;
+    }
+  }
+  .interests {
+    @media (max-width: 900px) {
+      order: 1;
     }
   }
   /* Only part of the load animation (Stream.astro), which clears it before
@@ -68,5 +79,8 @@ const command = 'curl https://dxanh97.dev';
   }
   main {
     min-width: 0;
+    @media (max-width: 900px) {
+      margin-top: 16px;
+    }
   }
 </style>
