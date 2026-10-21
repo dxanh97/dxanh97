@@ -20,7 +20,8 @@ npm run format    # Prettier (use format:check to verify only)
 
 - `src/content/profile.mdx`: name, role, contact links, `careerStart` and the intro. The years of experience are computed at build time.
 - `src/content/experiences/*.md`: one file per job. Front matter: `role`, `company`, `companyUrl`, `start` and optional `end` (`YYYY-MM`). The body is Markdown; bold only clients and products. Entries are sorted by `start`, newest first.
-- `src/data/techs.ts` and `src/data/interests.ts`: typed `{ name, icon }` arrays. Techs render as `--name` tags.
+- `src/data/techs.ts`: typed `{ name, icon, category }` array, rendered as a `tree ./stack` grouped by category. The category order is `techCategories` in the same file.
+- `src/data/interests.ts`: typed `{ name, icon }` array.
 
 ### Adding things
 

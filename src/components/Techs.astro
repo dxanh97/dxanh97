@@ -2,21 +2,45 @@
 import { Icon } from 'astro-icon/components';
 
 import Prompt from '@/components/Prompt.astro';
+import { techCategories, type TechCategory } from '@/data/techs';
 
 interface Props {
-  techList: Array<{ name: string; icon: string }>;
+  techList: Array<{ name: string; icon: string; category: TechCategory }>;
 }
 
 const { techList } = Astro.props;
+const groups = techCategories
+  .map((category) => ({
+    category,
+    items: techList.filter((tech) => tech.category === category),
+  }))
+  .filter((group) => group.items.length > 0);
 ---
 
 <section class="block">
-  <Prompt command="ls ./stack" label="Tech" />
-  <ul class="tags">
-    {techList.map((tech) => (
+  <Prompt command="tree ./stack" label="Tech" />
+  <p class="root" aria-hidden="true">
+    stack/
+  </p>
+  <ul class="tree">
+    {groups.map(({ category, items }) => (
       <li>
-        <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
-        <span>{tech.name.replace(/ /g, '-')}</span>
+        <span class="dir">{category}/</span>
+        <ul class="tree">
+          {items.map((tech) => (
+            <li>
+              <span class="tag">
+                <Icon
+                  name={tech.icon}
+                  width="1em"
+                  height="1em"
+                  aria-hidden="true"
+                />
+                {tech.name.replace(/ /g, '-')}
+              </span>
+            </li>
+          ))}
+        </ul>
       </li>
     ))}
   </ul>
@@ -26,45 +50,59 @@ const { techList } = Astro.props;
   .block {
     margin-bottom: 36px;
   }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+  .root {
+    margin: 0;
+    color: var(--accent);
+    font-size: 13px;
+    line-height: 24px;
+  }
+  /* Tree branches are drawn with borders rather than box-drawing
+     characters so they line up exactly with the rows. */
+  .tree {
     margin: 0;
     padding: 0;
     list-style: none;
+    font-size: 13px;
+    line-height: 24px;
     li {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 2px 9px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      background: var(--panel);
-      font-size: 13px;
-      text-transform: lowercase;
-      svg {
-        flex: none;
-        color: var(--muted);
+      position: relative;
+      padding: 1px 0 1px 28px;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 0;
+        bottom: 0;
+        border-left: 1px solid var(--muted);
       }
-      span::before {
-        content: '--';
-        content: '--' / '';
-        margin-right: 0.6ch;
-        color: var(--muted);
+      &:last-child::before {
+        bottom: auto;
+        height: 13px;
       }
-      @media (hover: hover) {
-        &:hover,
-        &:hover svg {
-          border-color: var(--accent);
-          color: var(--accent);
-        }
-        @media (prefers-reduced-motion: no-preference) {
-          transition:
-            border-color 150ms,
-            color 150ms;
-        }
+      &::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 13px;
+        width: 16px;
+        border-top: 1px solid var(--muted);
       }
+    }
+  }
+  .dir {
+    color: var(--accent);
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--ink) 6%, var(--bg));
+    text-transform: lowercase;
+    svg {
+      flex: none;
+      color: var(--muted);
     }
   }
 </style>
