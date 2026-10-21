@@ -10,9 +10,9 @@ const { name, role, email, github, linkedin, careerStart } = profile.data;
 const { Content } = await render(profile);
 
 const contactList = [
-  { href: `mailto:${email}`, icon: 'feather:mail' },
-  { href: github, icon: 'feather:github' },
-  { href: linkedin, icon: 'feather:linkedin' },
+  { href: `mailto:${email}`, icon: 'feather:mail', label: 'Email', external: false },
+  { href: github, icon: 'feather:github', label: 'GitHub', external: true },
+  { href: linkedin, icon: 'feather:linkedin', label: 'LinkedIn', external: true },
 ];
 ---
 
@@ -26,7 +26,7 @@ const contactList = [
       <div class="contact-wrapper">
         {
           contactList.map((contact) => (
-            <a target="_blank" rel="noreferrer" href={contact.href}><Icon name={contact.icon} width="1em" height="1em" /></a>
+            <a href={contact.href} aria-label={contact.label} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer' : undefined}><Icon name={contact.icon} width="1em" height="1em" aria-hidden="true" /></a>
           ))
         }
       </div>

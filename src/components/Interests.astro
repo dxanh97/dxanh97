@@ -14,7 +14,7 @@ const { interestList } = Astro.props;
   {
     interestList.map((interest) => (
       <div class="wrapper">
-        <Icon name={interest.icon} width="1em" height="1em" />
+        <Icon name={interest.icon} width="1em" height="1em" aria-hidden="true" />
         <span>{interest.name}</span>
       </div>
     ))

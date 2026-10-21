@@ -15,7 +15,7 @@ const { techList } = Astro.props;
     techList.map((tech) => (
       <div class="tag">
         <div>
-          <Icon name={tech.icon} width="1em" height="1em" />
+          <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
           <span>{tech.name}</span>
         </div>
       </div>
