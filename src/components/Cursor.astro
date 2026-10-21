@@ -1,4 +1,4 @@
-<div class="cursor-wrapper">
+<div class="cursor-wrapper" aria-hidden="true">
   <div class="cursor" data-cursor="big">
     <svg height="30" width="30">
       <circle cx="15" cy="15" r="12" stroke-width="0"></circle>
@@ -13,66 +13,104 @@
 </div>
 
 <script>
-  import { gsap } from 'gsap';
+  const $wrapper = document.querySelector<HTMLDivElement>('.cursor-wrapper');
 
-  const $bigCursor = document.querySelector<HTMLDivElement>(
-    '[data-cursor="big"]',
-  );
-  const $smallCursor = document.querySelector<HTMLDivElement>(
-    '[data-cursor="small"]',
-  );
-  let isMouseOnScreen = false;
+  if (
+    $wrapper &&
+    !$wrapper.dataset.ready &&
+    matchMedia('(pointer: fine)').matches
+  ) {
+    $wrapper.dataset.ready = '';
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-  document.body.addEventListener('mousemove', (e) => {
-    if (!isMouseOnScreen && $bigCursor?.style && $smallCursor?.style) {
-      $bigCursor.style.opacity = '1';
-      $smallCursor.style.opacity = '1';
-      isMouseOnScreen = true;
-    }
-    gsap.to($bigCursor, {
-      duration: 0.45,
-      x: e.pageX - 15,
-      y: e.pageY - 15,
-    });
-    gsap.to($smallCursor, {
-      duration: 0.1,
-      x: e.pageX - 5,
-      y: e.pageY - 12,
-    });
-  });
+    // Time constants (seconds) approximating the old gsap tweens:
+    // 0.45 s for the big circle, 0.1 s for the small dot.
+    const cursors = [
+      { tau: 0.15, dx: -15, dy: -15, x: 0, y: 0 },
+      { tau: 0.033, dx: -5, dy: -12, x: 0, y: 0 },
+    ].map((c, i) => ({
+      ...c,
+      el: $wrapper.children[i] as HTMLDivElement,
+    }));
 
-  document.body.addEventListener('mouseleave', () => {
-    isMouseOnScreen = false;
-    if ($bigCursor?.style && $smallCursor?.style) {
-      $bigCursor.style.opacity = '0';
-      $smallCursor.style.opacity = '0';
-    }
-  });
+    let pointerX = 0;
+    let pointerY = 0;
+    let frame = 0;
+    let last = 0;
 
-  const $hoverables = document.querySelectorAll('a');
-  $hoverables.forEach(($hoverable) => {
-    $hoverable.addEventListener('mouseenter', () => {
-      gsap.to($bigCursor, {
-        duration: 0.2,
-        scale: 3,
-      });
+    const render = () => {
+      for (const c of cursors) {
+        c.el.style.transform = `translate3d(${c.x}px,${c.y}px,0)`;
+      }
+    };
+
+    const snap = () => {
+      for (const c of cursors) {
+        c.x = pointerX + c.dx;
+        c.y = pointerY + c.dy;
+      }
+      render();
+    };
+
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      let settled = true;
+      for (const c of cursors) {
+        const k = 1 - Math.exp(-dt / c.tau);
+        const tx = pointerX + c.dx;
+        const ty = pointerY + c.dy;
+        c.x += (tx - c.x) * k;
+        c.y += (ty - c.y) * k;
+        if (Math.abs(tx - c.x) < 0.1 && Math.abs(ty - c.y) < 0.1) {
+          c.x = tx;
+          c.y = ty;
+        } else {
+          settled = false;
+        }
+      }
+      render();
+      frame = settled ? 0 : requestAnimationFrame(tick);
+    };
+
+    document.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      if (!$wrapper.classList.contains('is-visible')) {
+        if (!$wrapper.dataset.moved) {
+          $wrapper.dataset.moved = '';
+          snap();
+        }
+        $wrapper.classList.add('is-visible');
+      }
+      if (reduceMotion.matches) {
+        snap();
+      } else if (!frame) {
+        last = performance.now();
+        frame = requestAnimationFrame(tick);
+      }
     });
-    $hoverable.addEventListener('mouseleave', () => {
-      gsap.to($bigCursor, {
-        duration: 0.2,
-        scale: 1,
-      });
+
+    document.documentElement.addEventListener('mouseleave', () => {
+      $wrapper.classList.remove('is-visible', 'is-hovering');
     });
-  });
+
+    const onHover = (e: PointerEvent) => {
+      const target = e.type === 'pointerover' ? e.target : e.relatedTarget;
+      $wrapper.classList.toggle(
+        'is-hovering',
+        target instanceof Element && !!target.closest('a, button'),
+      );
+    };
+    document.addEventListener('pointerover', onHover);
+    document.addEventListener('pointerout', onHover);
+  }
 </script>
 
 <style lang="scss">
   .cursor-wrapper {
     pointer-events: none;
-    @media (pointer: coarse) {
-      pointer-events: unset;
-      opacity: 0;
-    }
   }
   .cursor {
     position: fixed;
@@ -80,8 +118,24 @@
     left: 0;
     mix-blend-mode: exclusion;
     z-index: 1000;
+    opacity: 0;
+    will-change: transform;
+    .is-visible & {
+      opacity: 1;
+    }
+    svg {
+      transition: transform 0.2s ease-out;
+    }
     circle {
       fill: var(--color-background);
+    }
+  }
+  .is-hovering [data-cursor='big'] svg {
+    transform: scale(3);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor svg {
+      transition: none;
     }
   }
 </style>
