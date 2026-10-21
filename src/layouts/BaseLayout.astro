@@ -1,7 +1,9 @@
 ---
 import '@fontsource-variable/space-grotesk';
 import '@/styles/global.scss';
+import '@/styles/print.scss';
 import Cursor from '@/components/Cursor.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
 import latin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 import latinExt from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2?url';
 import vietnamese from '@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2?url';
@@ -16,7 +18,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -25,13 +28,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#edecf8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#242424" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#16132e" media="(prefers-color-scheme: dark)" />
     {[latin, latinExt, vietnamese].map((href) => (
       <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
     ))}
+    <script is:inline>
+      try {
+        var theme = localStorage.theme;
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.dataset.theme = theme;
+          var color = theme === 'dark' ? '#16132e' : '#edecf8';
+          document
+            .querySelectorAll('meta[name="theme-color"]')
+            .forEach(function (meta) {
+              meta.content = color;
+            });
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <Cursor />
+    <ThemeToggle />
     <slot />
   </body>
 </html>

@@ -1,0 +1,52 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  :root:root:root {
+    color-scheme: light;
+    --color-primary: #271297 !important;
+    --color-background: #fff !important;
+    --color-caption: #6b6499 !important;
+  }
+
+  body {
+    font-size: 11pt;
+    line-height: 1.35;
+  }
+
+  h1 {
+    font-size: 56px !important;
+    line-height: 48px !important;
+  }
+
+  .cursor-wrapper,
+  .theme-toggle {
+    display: none !important;
+  }
+
+  main.wrapper {
+    display: block !important;
+    max-width: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    & > div {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    h2 {
+      margin-top: 24px !important;
+    }
+  }
+
+  .box,
+  div:has(> .company-role) {
+    break-inside: avoid;
+  }
+
+  div:has(> .company-role) {
+    margin-bottom: 20px !important;
+  }
+}

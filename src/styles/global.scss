@@ -1,15 +1,25 @@
+@mixin dark-theme {
+  color-scheme: dark;
+  --color-primary: #e9e6ff;
+  --color-background: #16132e;
+  --color-caption: #a9a3d9;
+  --cursor-fill: var(--color-primary);
+}
+
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --color-primary: #271297;
   --color-background: #edecf8;
   --color-caption: #6b6499;
+  --cursor-fill: var(--color-background);
 }
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: #ffffff;
-    --color-background: #242424;
-    --color-caption: #b8b8b8;
+  :root:not([data-theme='light']) {
+    @include dark-theme;
   }
+}
+:root[data-theme='dark'] {
+  @include dark-theme;
 }
 
 body {

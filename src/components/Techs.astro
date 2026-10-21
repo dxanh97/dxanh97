@@ -31,6 +31,17 @@ const { techList } = Astro.props;
     border: 1px solid var(--color-primary);
     margin-right: 8px;
     margin-bottom: 8px;
+    @media (hover: hover) {
+      &:hover {
+        background: var(--color-primary);
+        color: var(--color-background);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        transition:
+          background-color 150ms,
+          color 150ms;
+      }
+    }
     & > div {
       display: flex;
       align-items: center;

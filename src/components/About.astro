@@ -14,6 +14,11 @@ const contactList = [
   { href: github, icon: 'feather:github', label: 'GitHub', external: true },
   { href: linkedin, icon: 'feather:linkedin', label: 'LinkedIn', external: true },
 ];
+
+const printContact = [
+  email,
+  ...[github, linkedin].map((url) => url.replace(/^https?:\/\/(www\.)?/, '')),
+].join(' · ');
 ---
 
 <div class="wrapper">
@@ -30,6 +35,7 @@ const contactList = [
           ))
         }
       </div>
+      <p class="print-contact">{printContact}</p>
     </div>
   </div>
 </div>
@@ -38,6 +44,13 @@ const contactList = [
 </Section>
 
 <style lang="scss">
+  .print-contact {
+    display: none;
+    @media print {
+      display: block;
+      margin: 0 0 4px;
+    }
+  }
   div.wrapper {
     display: flex;
     div.box {
