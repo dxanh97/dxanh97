@@ -38,9 +38,6 @@ const experienceList = await Promise.all(
       );
     })}
   </ol>
-  <p class="exit" aria-hidden="true">
-    [process exited with code 0]
-  </p>
 </section>
 
 <style lang="scss">
@@ -114,10 +111,5 @@ const experienceList = await Promise.all(
       color: var(--ink);
       font-weight: 700;
     }
-  }
-  .exit {
-    margin: 0;
-    color: var(--muted);
-    font-size: 13px;
   }
 </style>
