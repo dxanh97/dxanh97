@@ -38,7 +38,7 @@ A terminal-style theme: monospace type, shell-prompt section headings and a `git
 | `--panel`  | `#ffffff` | `#111111` |
 | `--ink`    | `#0a0a0a` | `#e8e8e8` |
 | `--muted`  | `#5c5c5c` | `#8f8f8f` |
-| `--accent` | `#3b2bff` | `#c6ff00` |
+| `--accent` | `#4a7300` | `#c6ff00` |
 | `--line`   | `#e3e3e3` | `#262626` |
 
 - **Font:** [JetBrains Mono](https://www.jetbrains.com/lp/mono/) via `@fontsource-variable/jetbrains-mono`. The latin, latin-ext and Vietnamese subsets are preloaded because the name needs all three.
