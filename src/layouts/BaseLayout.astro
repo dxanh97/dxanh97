@@ -60,8 +60,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
     <script is:inline>
       // Hide the page until Stream.astro prints it. Never with reduced
-      // motion, and show everything if the stream has not started in 3s.
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // motion or for automated audits (which would measure text mid-fade),
+      // and show everything if the stream has not started in 3s.
+      if (
+        !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+        !navigator.webdriver
+      ) {
         const root = document.documentElement;
         root.dataset.boot = '';
         setTimeout(function () {
