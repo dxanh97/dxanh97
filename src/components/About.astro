@@ -47,9 +47,10 @@ const printContact = [
       href={contact.href}
       target={contact.external ? '_blank' : undefined}
       rel={contact.external ? 'noreferrer' : undefined}
+      aria-label={contact.label}
     >
       <Icon name={contact.icon} width="1em" height="1em" aria-hidden="true" />
-      {contact.label}
+      <span class="label">{contact.label}</span>
     </a>
   ))}
 </nav>
@@ -96,6 +97,11 @@ const printContact = [
       &:hover {
         border-color: var(--accent);
         color: var(--accent);
+      }
+      @media (max-width: 900px) {
+        .label {
+          display: none;
+        }
       }
     }
   }
