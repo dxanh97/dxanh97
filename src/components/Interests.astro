@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import Section from '@/components/Section.astro';
+
+interface Props {
+  interestList: Array<{ name: string; icon: string }>;
+}
+
+const { interestList } = Astro.props;
+---
+
+<Section header="Interests">
+  {
+    interestList.map((interest) => (
+      <div class="wrapper">
+        <Icon name={interest.icon} width="1em" height="1em" />
+        <span>{interest.name}</span>
+      </div>
+    ))
+  }
+</Section>
+
+<style lang="scss">
+  div.wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    svg {
+      margin-right: 8px;
+    }
+  }
+</style>

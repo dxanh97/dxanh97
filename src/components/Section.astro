@@ -1,0 +1,36 @@
+---
+interface Props {
+  header: string;
+}
+
+const { header } = Astro.props;
+---
+
+<div class="wrapper">
+  <h3>{header}</h3>
+  <slot />
+</div>
+
+<style lang="scss">
+  div.wrapper {
+    & > h3 {
+      font-size: 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 40px;
+      padding-left: 16px;
+      position: relative;
+      &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+</style>

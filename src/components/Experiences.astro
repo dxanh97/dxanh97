@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Section from '@/components/Section.astro';
+
+const experiences = (await getCollection('experiences')).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+const experienceList = await Promise.all(
+  experiences.map(async (experience) => ({
+    ...experience.data,
+    Content: (await render(experience)).Content,
+  })),
+);
+---
+
+<Section header="Experiences">
+  {
+    experienceList.map((experience) => {
+      const { role, period, company, companyUrl, Content } = experience;
+      const [from, to = 'Present'] = period;
+      return (
+        <div class="wrapper">
+          <p class="company-role"><b>{role}</b>&nbsp;at&nbsp;<b><a href={companyUrl} target="_blank" rel="noreferrer">{company}</a></b></p>
+          <span class="period">{`${from} — ${to}`}</span>
+          <div class="brief">
+            <div><Content /></div>
+          </div>
+        </div>
+      );
+    })
+  }
+</Section>
+
+<style lang="scss">
+  div.wrapper {
+    margin-bottom: 40px;
+    p.company-role {
+      margin-bottom: 8px;
+    }
+    span.period {
+      color: var(--color-caption);
+    }
+  }
+</style>

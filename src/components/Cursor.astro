@@ -1,0 +1,87 @@
+<div class="cursor-wrapper">
+  <div class="cursor" data-cursor="big">
+    <svg height="30" width="30">
+      <circle cx="15" cy="15" r="12" stroke-width="0"></circle>
+    </svg>
+  </div>
+
+  <div class="cursor" data-cursor="small">
+    <svg height="10" width="10">
+      <circle cx="5" cy="5" r="4" stroke-width="0"></circle>
+    </svg>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const $bigCursor = document.querySelector<HTMLDivElement>(
+    '[data-cursor="big"]',
+  );
+  const $smallCursor = document.querySelector<HTMLDivElement>(
+    '[data-cursor="small"]',
+  );
+  let isMouseOnScreen = false;
+
+  document.body.addEventListener('mousemove', (e) => {
+    if (!isMouseOnScreen && $bigCursor?.style && $smallCursor?.style) {
+      $bigCursor.style.opacity = '1';
+      $smallCursor.style.opacity = '1';
+      isMouseOnScreen = true;
+    }
+    gsap.to($bigCursor, {
+      duration: 0.45,
+      x: e.pageX - 15,
+      y: e.pageY - 15,
+    });
+    gsap.to($smallCursor, {
+      duration: 0.1,
+      x: e.pageX - 5,
+      y: e.pageY - 12,
+    });
+  });
+
+  document.body.addEventListener('mouseleave', () => {
+    isMouseOnScreen = false;
+    if ($bigCursor?.style && $smallCursor?.style) {
+      $bigCursor.style.opacity = '0';
+      $smallCursor.style.opacity = '0';
+    }
+  });
+
+  const $hoverables = document.querySelectorAll('a');
+  $hoverables.forEach(($hoverable) => {
+    $hoverable.addEventListener('mouseenter', () => {
+      gsap.to($bigCursor, {
+        duration: 0.2,
+        scale: 3,
+      });
+    });
+    $hoverable.addEventListener('mouseleave', () => {
+      gsap.to($bigCursor, {
+        duration: 0.2,
+        scale: 1,
+      });
+    });
+  });
+</script>
+
+<style lang="scss">
+  .cursor-wrapper {
+    pointer-events: none;
+    @media (pointer: coarse) {
+      pointer-events: unset;
+      opacity: 0;
+    }
+  }
+  .cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    mix-blend-mode: exclusion;
+    z-index: 1000;
+    circle {
+      fill: var(--color-background);
+    }
+  }
+</style>
