@@ -3,8 +3,11 @@ import { getCollection, render } from 'astro:content';
 
 import Section from '@/components/Section.astro';
 
+const fmt = new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const formatMonth = (ym: string) => fmt.format(new Date(`${ym}-01T00:00:00Z`));
+
 const experiences = (await getCollection('experiences')).sort(
-  (a, b) => b.data.order - a.data.order,
+  (a, b) => b.data.start.localeCompare(a.data.start),
 );
 const experienceList = await Promise.all(
   experiences.map(async (experience) => ({
@@ -17,12 +20,11 @@ const experienceList = await Promise.all(
 <Section header="Experiences">
   {
     experienceList.map((experience) => {
-      const { role, period, company, companyUrl, Content } = experience;
-      const [from, to = 'Present'] = period;
-      return (
+      const { role, start, end, company, companyUrl, Content } = experience;
+            return (
         <div class="wrapper">
           <p class="company-role"><b>{role}</b>&nbsp;at&nbsp;<b><a href={companyUrl} target="_blank" rel="noreferrer">{company}</a></b></p>
-          <span class="period">{`${from} — ${to}`}</span>
+          <span class="period">{`${formatMonth(start)} — ${end ? formatMonth(end) : 'Present'}`}</span>
           <div class="brief">
             <div><Content /></div>
           </div>
@@ -40,6 +42,14 @@ const experienceList = await Promise.all(
     }
     span.period {
       color: var(--color-caption);
+    }
+    .brief :global(ul) {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .brief :global(li)::before {
+      content: '• ';
     }
   }
 </style>

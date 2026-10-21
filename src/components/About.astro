@@ -4,13 +4,13 @@ import { Icon } from 'astro-icon/components';
 
 import Section from '@/components/Section.astro';
 
-const about = await getEntry('about', 'about');
-if (!about) throw new Error('Missing src/content/about.md');
-const { name, role, email, github, linkedin } = about.data;
-const { Content } = await render(about);
+const profile = await getEntry('profile', 'profile');
+if (!profile) throw new Error('Missing src/content/profile.mdx');
+const { name, role, email, github, linkedin, careerStart } = profile.data;
+const { Content } = await render(profile);
 
 const contactList = [
-  { href: email, icon: 'feather:mail' },
+  { href: `mailto:${email}`, icon: 'feather:mail' },
   { href: github, icon: 'feather:github' },
   { href: linkedin, icon: 'feather:linkedin' },
 ];
@@ -34,14 +34,8 @@ const contactList = [
   </div>
 </div>
 <Section header="About">
-  <div><Content /></div>
+  <div><Content yearsOfExperience={new Date().getFullYear() - careerStart} /></div>
 </Section>
-
-<script>
-  document
-    .getElementById('yoe')
-    ?.appendChild(document.createTextNode(`${new Date().getFullYear() - 2018}`));
-</script>
 
 <style lang="scss">
   div.wrapper {
