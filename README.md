@@ -20,14 +20,13 @@ npm run format    # Prettier (use format:check to verify only)
 
 - `src/content/profile.mdx`: name, role, contact links, `careerStart` and the intro. The years of experience are computed at build time.
 - `src/content/experiences/*.md`: one file per job. Front matter: `role`, `company`, `companyUrl`, `start` and optional `end` (`YYYY-MM`). The body is Markdown; bold only clients and products. Entries are sorted by `start`, newest first.
-- `src/data/techs.ts`: typed `{ name }` array, shown as `--name` tags.
-- `src/data/interests.ts`: typed `{ name, icon }` array.
+- `src/data/techs.ts` and `src/data/interests.ts`: typed `{ name, icon }` arrays. Techs render as `--name` tags.
 
 ### Adding things
 
 - **Experience:** add a Markdown file to `src/content/experiences/` with the front matter above.
 - **Tech or interest:** add an entry to the matching array in `src/data/`.
-- **Icons** (interests and contact links) use [Iconify](https://icon-sets.iconify.design/) names in the form `set:icon-name`. Browse the sets and copy the name. The installed sets are `simple-icons`, `tabler`, `ri` and `feather`; for another set, install `@iconify-json/<set>`. A misspelled name fails the build.
+- **Icons** use [Iconify](https://icon-sets.iconify.design/) names in the form `set:icon-name`. Browse the sets and copy the name. The installed sets are `simple-icons`, `tabler`, `ri` and `feather`; for another set, install `@iconify-json/<set>`. A misspelled name fails the build.
 
 ## Design
 

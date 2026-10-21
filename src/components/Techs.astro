@@ -1,8 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 import Prompt from '@/components/Prompt.astro';
 
 interface Props {
-  techList: Array<{ name: string }>;
+  techList: Array<{ name: string; icon: string }>;
 }
 
 const { techList } = Astro.props;
@@ -12,7 +14,10 @@ const { techList } = Astro.props;
   <Prompt command="ls ./stack" label="Tech" />
   <ul class="tags">
     {techList.map((tech) => (
-      <li>{tech.name.replace(/ /g, '-')}</li>
+      <li>
+        <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
+        <span>{tech.name.replace(/ /g, '-')}</span>
+      </li>
     ))}
   </ul>
 </section>
@@ -29,20 +34,28 @@ const { techList } = Astro.props;
     padding: 0;
     list-style: none;
     li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 2px 9px;
       border: 1px solid var(--line);
       border-radius: 4px;
       background: var(--panel);
       font-size: 13px;
       text-transform: lowercase;
-      &::before {
+      svg {
+        flex: none;
+        color: var(--muted);
+      }
+      span::before {
         content: '--';
         content: '--' / '';
         margin-right: 0.6ch;
         color: var(--muted);
       }
       @media (hover: hover) {
-        &:hover {
+        &:hover,
+        &:hover svg {
           border-color: var(--accent);
           color: var(--accent);
         }
