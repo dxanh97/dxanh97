@@ -1,17 +1,21 @@
 @mixin dark-theme {
   color-scheme: dark;
-  --color-primary: #e9e6ff;
-  --color-background: #16132e;
-  --color-caption: #a9a3d9;
-  --cursor-fill: var(--color-primary);
+  --bg: #0a0a0a;
+  --panel: #111111;
+  --ink: #e8e8e8;
+  --muted: #8f8f8f;
+  --accent: #c6ff00;
+  --line: #262626;
 }
 
 :root {
   color-scheme: light;
-  --color-primary: #271297;
-  --color-background: #edecf8;
-  --color-caption: #6b6499;
-  --cursor-fill: var(--color-background);
+  --bg: #fafafa;
+  --panel: #ffffff;
+  --ink: #0a0a0a;
+  --muted: #5c5c5c;
+  --accent: #3b2bff;
+  --line: #e3e3e3;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -22,20 +26,65 @@
   @include dark-theme;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-  background: var(--color-background);
-  font-weight: 300;
-  font-size: 20px;
-  line-height: 24px;
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    400 15px/1.75 'JetBrains Mono Variable',
+    ui-monospace,
+    monospace;
+  -webkit-font-smoothing: antialiased;
   @media (pointer: fine) {
     cursor: none;
+    a,
+    button {
+      cursor: none;
+    }
   }
-  color: var(--color-primary);
-  a {
-    color: inherit;
-  }
-  b {
-    font-weight: 500;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Terminal prompt line: `~ $ command`. */
+.prompt {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  .tilde {
+    color: var(--accent);
   }
 }

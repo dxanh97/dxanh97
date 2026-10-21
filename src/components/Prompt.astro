@@ -1,0 +1,17 @@
+---
+// A section heading styled as a shell prompt. The prompt text is decorative;
+// screen readers get the plain section name instead.
+interface Props {
+  command: string;
+  label: string;
+}
+
+const { command, label } = Astro.props;
+---
+
+<h2 class="prompt">
+  <span aria-hidden="true">
+    <span class="tilde">~</span> $ {command}
+  </span>
+  <span class="sr-only">{label}</span>
+</h2>

@@ -1,14 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 
-import Section from '@/components/Section.astro';
-
-const fmt = new Intl.DateTimeFormat('en', {
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-const formatMonth = (ym: string) => fmt.format(new Date(`${ym}-01T00:00:00Z`));
+import Prompt from '@/components/Prompt.astro';
 
 const experiences = (await getCollection('experiences')).sort((a, b) =>
   b.data.start.localeCompare(a.data.start),
@@ -21,46 +14,110 @@ const experienceList = await Promise.all(
 );
 ---
 
-<Section header="Experiences">
-  {experienceList.map((experience) => {
-    const { role, start, end, company, companyUrl, Content } = experience;
-    return (
-      <div class="wrapper">
-        <p class="company-role">
-          <b>{role}</b>&nbsp;at&nbsp;
-          <b>
+<section>
+  <Prompt command="git log --career" label="Experience" />
+  <ol class="log">
+    {experienceList.map((experience) => {
+      const { role, start, end, company, companyUrl, Content } = experience;
+      return (
+        <li class:list={['entry', { current: !end }]}>
+          <p class="meta">
+            <time datetime={start}>{start}</time> →{' '}
+            {end ? <time datetime={end}>{end}</time> : 'now'}
+          </p>
+          <h3>
+            {role} <span class="at">@</span>{' '}
             <a href={companyUrl} target="_blank" rel="noreferrer">
               {company}
             </a>
-          </b>
-        </p>
-        <span class="period">{`${formatMonth(start)} — ${end ? formatMonth(end) : 'Present'}`}</span>
-        <div class="brief">
-          <div>
+          </h3>
+          <div class="brief">
             <Content />
           </div>
-        </div>
-      </div>
-    );
-  })}
-</Section>
+        </li>
+      );
+    })}
+  </ol>
+  <p class="exit" aria-hidden="true">
+    [process exited with code 0]
+  </p>
+</section>
 
 <style lang="scss">
-  div.wrapper {
-    margin-bottom: 40px;
-    p.company-role {
-      margin-bottom: 8px;
+  section > :global(.prompt) {
+    margin-bottom: 28px;
+  }
+  .log {
+    margin: 0 0 0 5px;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid var(--line);
+  }
+  .entry {
+    position: relative;
+    padding: 0 0 44px 28px;
+    &::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 8px;
+      width: 11px;
+      height: 11px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      background: var(--bg);
     }
-    span.period {
-      color: var(--color-caption);
+    &.current::before {
+      background: var(--accent);
     }
-    .brief :global(ul) {
-      list-style: none;
+  }
+  .meta {
+    margin: 0;
+    color: var(--accent);
+    font-size: 13px;
+  }
+  h3 {
+    margin: 4px 0 12px;
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    text-transform: lowercase;
+    a {
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+      &:hover {
+        color: var(--accent);
+      }
+    }
+  }
+  .at {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .brief {
+    color: color-mix(in srgb, var(--ink) 82%, var(--bg));
+    :global(p),
+    :global(ul) {
+      margin: 0 0 10px;
+    }
+    :global(ul) {
       padding: 0;
-      margin: 0;
+      list-style: none;
     }
-    .brief :global(li)::before {
-      content: '• ';
+    :global(li)::before {
+      content: '> ';
+      content: '> ' / '';
+      color: var(--muted);
     }
+    :global(strong) {
+      color: var(--ink);
+      font-weight: 700;
+    }
+  }
+  .exit {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
   }
 </style>

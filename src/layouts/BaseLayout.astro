@@ -1,12 +1,12 @@
 ---
-import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/jetbrains-mono';
 import '@/styles/global.scss';
 import '@/styles/print.scss';
 import Cursor from '@/components/Cursor.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
-import latin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
-import latinExt from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2?url';
-import vietnamese from '@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2?url';
+import latin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+import latinExt from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-ext-wght-normal.woff2?url';
+import vietnamese from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-vietnamese-wght-normal.woff2?url';
 
 const title = '<dxanh97 />';
 const description =
@@ -29,12 +29,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta
       name="theme-color"
-      content="#edecf8"
+      content="#fafafa"
       media="(prefers-color-scheme: light)"
     />
     <meta
       name="theme-color"
-      content="#16132e"
+      content="#0a0a0a"
       media="(prefers-color-scheme: dark)"
     />
     {[latin, latinExt, vietnamese].map((href) => (
@@ -45,7 +45,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         const theme = localStorage.theme;
         if (theme === 'light' || theme === 'dark') {
           document.documentElement.dataset.theme = theme;
-          const color = theme === 'dark' ? '#16132e' : '#edecf8';
+          const color = theme === 'dark' ? '#0a0a0a' : '#fafafa';
           document
             .querySelectorAll('meta[name="theme-color"]')
             .forEach(function (meta) {
@@ -63,9 +63,3 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <slot />
   </body>
 </html>
-
-<style is:global>
-  body {
-    font-family: 'Space Grotesk Variable', sans-serif;
-  }
-</style>

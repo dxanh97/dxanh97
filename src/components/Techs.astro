@@ -1,51 +1,56 @@
 ---
-import { Icon } from 'astro-icon/components';
-
-import Section from '@/components/Section.astro';
+import Prompt from '@/components/Prompt.astro';
 
 interface Props {
-  techList: Array<{ name: string; icon: string }>;
+  techList: Array<{ name: string }>;
 }
 
 const { techList } = Astro.props;
 ---
 
-<Section header="Tech">
-  {techList.map((tech) => (
-    <div class="tag">
-      <div>
-        <Icon name={tech.icon} width="1em" height="1em" aria-hidden="true" />
-        <span>{tech.name}</span>
-      </div>
-    </div>
-  ))}
-</Section>
+<section class="block">
+  <Prompt command="ls ./stack" label="Tech" />
+  <ul class="tags">
+    {techList.map((tech) => (
+      <li>{tech.name.replace(/ /g, '-')}</li>
+    ))}
+  </ul>
+</section>
 
 <style lang="scss">
-  div.tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    border: 1px solid var(--color-primary);
-    margin-right: 8px;
-    margin-bottom: 8px;
-    @media (hover: hover) {
-      &:hover {
-        background: var(--color-primary);
-        color: var(--color-background);
+  .block {
+    margin-bottom: 36px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      padding: 2px 9px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel);
+      font-size: 13px;
+      text-transform: lowercase;
+      &::before {
+        content: '--';
+        content: '--' / '';
+        margin-right: 0.6ch;
+        color: var(--muted);
       }
-      @media (prefers-reduced-motion: no-preference) {
-        transition:
-          background-color 150ms,
-          color 150ms;
-      }
-    }
-    & > div {
-      display: flex;
-      align-items: center;
-      svg {
-        margin-right: 4px;
-        font-size: 16px;
+      @media (hover: hover) {
+        &:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          transition:
+            border-color 150ms,
+            color 150ms;
+        }
       }
     }
   }

@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-import Section from '@/components/Section.astro';
+import Prompt from '@/components/Prompt.astro';
 
 interface Props {
   interestList: Array<{ name: string; icon: string }>;
@@ -10,22 +10,43 @@ interface Props {
 const { interestList } = Astro.props;
 ---
 
-<Section header="Interests">
-  {interestList.map((interest) => (
-    <div class="wrapper">
-      <Icon name={interest.icon} width="1em" height="1em" aria-hidden="true" />
-      <span>{interest.name}</span>
-    </div>
-  ))}
-</Section>
+<section class="block">
+  <Prompt command="ls ./interests" label="Interests" />
+  <ul class="ls">
+    {interestList.map((interest) => (
+      <li>
+        <Icon
+          name={interest.icon}
+          width="1em"
+          height="1em"
+          aria-hidden="true"
+        />
+        {interest.name}
+      </li>
+    ))}
+  </ul>
+</section>
 
 <style lang="scss">
-  div.wrapper {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
+  .block {
+    margin-bottom: 36px;
+  }
+  .ls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: lowercase;
+    }
     svg {
-      margin-right: 8px;
+      flex: none;
+      color: var(--accent);
     }
   }
 </style>

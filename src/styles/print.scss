@@ -4,49 +4,75 @@
     margin: 15mm;
   }
 
+  /* Always print the light palette on white paper. */
   :root:root:root {
     color-scheme: light;
-    --color-primary: #271297 !important;
-    --color-background: #fff !important;
-    --color-caption: #6b6499 !important;
+    --bg: #fff !important;
+    --panel: #fff !important;
+    --ink: #0a0a0a !important;
+    --muted: #5c5c5c !important;
+    --accent: #3b2bff !important;
+    --line: #d0d0d0 !important;
   }
 
   body {
-    font-size: 11pt;
-    line-height: 1.35;
+    font-size: 9.5pt;
+    line-height: 1.5;
   }
 
-  h1 {
-    font-size: 56px !important;
-    line-height: 48px !important;
-  }
-
+  /* Decoration that makes no sense on paper. */
   .cursor-wrapper,
-  .theme-toggle {
+  .theme-toggle,
+  .caret,
+  .exit,
+  p.prompt,
+  .links {
     display: none !important;
   }
 
-  main.wrapper {
+  /* Section prompts become plain headings. */
+  h2.prompt {
+    margin: 14px 0 6px !important;
+    color: var(--ink) !important;
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    [aria-hidden='true'] {
+      display: none;
+    }
+    .sr-only {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+  }
+
+  .print-contact {
+    display: block !important;
+    margin: 0 0 4px;
+  }
+
+  .wrap {
     display: block !important;
     max-width: none !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    & > div {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-    }
-    h2 {
-      margin-top: 24px !important;
-    }
+    padding: 0 !important;
   }
 
-  .box,
-  div:has(> .company-role) {
+  aside {
+    position: static !important;
+  }
+
+  .name {
+    font-size: 30pt !important;
+  }
+
+  .entry {
     break-inside: avoid;
-  }
-
-  div:has(> .company-role) {
-    margin-bottom: 20px !important;
+    padding-bottom: 16px !important;
   }
 }

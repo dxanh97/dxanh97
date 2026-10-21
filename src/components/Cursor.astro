@@ -1,14 +1,9 @@
 <div class="cursor-wrapper" aria-hidden="true">
-  <div class="cursor" data-cursor="big">
-    <svg height="30" width="30">
-      <circle cx="15" cy="15" r="12" stroke-width="0"></circle>
-    </svg>
+  <div class="cursor" data-cursor="ring">
+    <span></span>
   </div>
-
-  <div class="cursor" data-cursor="small">
-    <svg height="10" width="10">
-      <circle cx="5" cy="5" r="4" stroke-width="0"></circle>
-    </svg>
+  <div class="cursor" data-cursor="dot">
+    <span></span>
   </div>
 </div>
 
@@ -23,11 +18,11 @@
     $wrapper.dataset.ready = '';
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-    // Time constants (seconds) approximating the old gsap tweens:
-    // 0.45 s for the big circle, 0.1 s for the small dot.
+    // Time constants (seconds): the ring trails, the dot nearly tracks.
+    // Both are centred on the pointer by their CSS, so no offsets.
     const cursors = [
-      { tau: 0.15, dx: -15, dy: -15, x: 0, y: 0 },
-      { tau: 0.033, dx: -5, dy: -12, x: 0, y: 0 },
+      { tau: 0.15, dx: 0, dy: 0, x: 0, y: 0 },
+      { tau: 0.033, dx: 0, dy: 0, x: 0, y: 0 },
     ].map((c, i) => ({
       ...c,
       el: $wrapper.children[i] as HTMLDivElement,
@@ -116,25 +111,38 @@
     position: fixed;
     top: 0;
     left: 0;
-    mix-blend-mode: exclusion;
     z-index: 1000;
     opacity: 0;
     will-change: transform;
     .is-visible & {
       opacity: 1;
     }
-    svg {
-      transition: transform 0.2s ease-out;
-    }
-    circle {
-      fill: var(--cursor-fill);
+    span {
+      display: block;
+      border-radius: 50%;
     }
   }
-  .is-hovering [data-cursor='big'] svg {
-    transform: scale(3);
+  [data-cursor='ring'] span {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1.5px solid var(--accent);
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease;
+  }
+  [data-cursor='dot'] span {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    background: var(--accent);
+  }
+  .is-hovering [data-cursor='ring'] span {
+    transform: scale(2);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
   }
   @media (prefers-reduced-motion: reduce) {
-    .cursor svg {
+    [data-cursor='ring'] span {
       transition: none;
     }
   }

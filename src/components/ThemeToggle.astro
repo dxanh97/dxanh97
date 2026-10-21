@@ -1,26 +1,14 @@
----
-import { Icon } from 'astro-icon/components';
----
-
 <button type="button" class="theme-toggle" aria-label="Switch theme">
-  <Icon
-    class="moon"
-    name="feather:moon"
-    width="1em"
-    height="1em"
-    aria-hidden="true"
-  />
-  <Icon
-    class="sun"
-    name="feather:sun"
-    width="1em"
-    height="1em"
-    aria-hidden="true"
-  />
+  <span class="to-dark" aria-hidden="true">
+    [ dark ]
+  </span>
+  <span class="to-light" aria-hidden="true">
+    [ light ]
+  </span>
 </button>
 
 <script>
-  const colors = { light: '#edecf8', dark: '#16132e' };
+  const colors = { light: '#fafafa', dark: '#0a0a0a' };
   const root = document.documentElement;
   const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
 
@@ -56,51 +44,43 @@ import { Icon } from 'astro-icon/components';
 <style lang="scss">
   .theme-toggle {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--color-primary);
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 16px;
+    right: 16px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--muted);
+    font: inherit;
+    font-size: 13px;
+    &:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
     @media print {
       display: none;
     }
   }
-  .sun {
+  /* Show the theme the button switches to. */
+  .to-light {
     display: none;
+  }
+  @mixin dark-labels {
+    .to-dark {
+      display: none;
+    }
+    .to-light {
+      display: inline;
+    }
   }
   @media (prefers-color-scheme: dark) {
     :global(:root:not([data-theme='light'])) {
-      .moon {
-        display: none;
-      }
-      .sun {
-        display: block;
-      }
+      @include dark-labels;
     }
   }
   :global(:root[data-theme='dark']) {
-    .moon {
-      display: none;
-    }
-    .sun {
-      display: block;
-    }
-  }
-  :global(:root[data-theme='light']) {
-    .moon {
-      display: block;
-    }
-    .sun {
-      display: none;
-    }
+    @include dark-labels;
   }
 </style>
