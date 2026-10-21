@@ -1,10 +1,22 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
 <button type="button" class="theme-toggle" aria-label="Switch theme">
-  <span class="to-dark" aria-hidden="true">
-    [dark]
-  </span>
-  <span class="to-light" aria-hidden="true">
-    [light]
-  </span>
+  <Icon
+    name="tabler:moon"
+    class="to-dark"
+    width="1em"
+    height="1em"
+    aria-hidden="true"
+  />
+  <Icon
+    name="tabler:sun"
+    class="to-light"
+    width="1em"
+    height="1em"
+    aria-hidden="true"
+  />
 </button>
 
 <script>
@@ -26,8 +38,7 @@
   label();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', label);
 
-  button?.addEventListener('click', () => {
-    const next = current() === 'dark' ? 'light' : 'dark';
+  const apply = (next: 'light' | 'dark') => {
     root.dataset.theme = next;
     try {
       localStorage.theme = next;
@@ -38,14 +49,55 @@
       .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
       .forEach((meta) => (meta.content = colors[next]));
     label();
+  };
+
+  button?.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    if (
+      !document.startViewTransition ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      apply(next);
+      return;
+    }
+    // Reveal the new theme in a circle growing from the button until it
+    // reaches the farthest corner of the viewport.
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(
+      Math.max(x, innerWidth - x),
+      Math.max(y, innerHeight - y),
+    );
+    document
+      .startViewTransition(() => apply(next))
+      .ready.then(() => {
+        root.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${radius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 500,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      });
   });
 </script>
 
 <style lang="scss">
   .theme-toggle {
+    /* Above .wrap, which comes later in the page and would cover it. */
     position: absolute;
+    z-index: 1;
     top: 16px;
     right: 16px;
+    display: inline-flex;
+    padding: 8px;
     border: 1px solid var(--line);
     border-radius: 6px;
     background: var(--bg);
@@ -69,7 +121,7 @@
       display: none;
     }
     .to-light {
-      display: inline;
+      display: block;
     }
   }
   @media (prefers-color-scheme: dark) {
@@ -79,5 +131,12 @@
   }
   :global(:root[data-theme='dark']) {
     @include dark-labels;
+  }
+  /* The click handler animates the new snapshot itself; drop the default
+     crossfade so the old theme stays put underneath. */
+  :global(::view-transition-old(root)),
+  :global(::view-transition-new(root)) {
+    animation: none;
+    mix-blend-mode: normal;
   }
 </style>
