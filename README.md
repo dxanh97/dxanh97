@@ -42,7 +42,7 @@ A terminal-style theme: monospace type, shell-prompt section headings and a `git
 | `--accent` | `#4a7300` | `#c6ff00` |
 | `--line`   | `#e3e3e3` | `#262626` |
 
-- **Font:** [JetBrains Mono](https://www.jetbrains.com/lp/mono/) via `@fontsource-variable/jetbrains-mono`. The latin, latin-ext and Vietnamese subsets are preloaded because the name needs all three.
+- **Font:** [Space Mono](https://fonts.google.com/specimen/Space+Mono) via `@fontsource/space-mono`. The latin, latin-ext and Vietnamese subsets are preloaded because the name needs all three.
 - **Styles:** tokens, base styles and the shared `.prompt` style in `src/styles/global.scss`; print (A4 CV) rules in `src/styles/print.scss`; everything else is scoped inside each component in `src/components/`.
 - **Lowercase is CSS only** (`text-transform`). Content stays properly capitalised for search engines, screen readers and print.
 - **Section headings** are `<h2>` prompts whose visible text is decorative (`aria-hidden`); screen readers hear the plain section name.
