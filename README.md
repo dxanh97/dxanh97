@@ -31,7 +31,7 @@ npm run format    # Prettier (use format:check to verify only)
 
 ## Design
 
-A terminal-style theme: monospace type, shell-prompt section headings and a `git log` career timeline. It follows the system light/dark setting until the `[ dark ]` / `[ light ]` button sets a choice, which is saved in `localStorage`.
+A terminal-style theme: monospace type, shell-prompt section headings and a `git log` career timeline. It follows the system light/dark setting until the `[dark]` / `[light]` button sets a choice, which is saved in `localStorage`.
 
 | Token      | Light     | Dark      |
 | ---------- | --------- | --------- |
