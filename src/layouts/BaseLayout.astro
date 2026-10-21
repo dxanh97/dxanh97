@@ -2,6 +2,14 @@
 import '@fontsource-variable/space-grotesk';
 import '@/styles/global.scss';
 import Cursor from '@/components/Cursor.astro';
+import latin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import latinExt from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2?url';
+import vietnamese from '@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2?url';
+
+const title = '<dxanh97 />';
+const description =
+  'Software Engineer specializing in JavaScript and TypeScript.';
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
@@ -9,7 +17,18 @@ import Cursor from '@/components/Cursor.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
-    <title>&lt;dxanh97 /&gt;</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#edecf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#242424" media="(prefers-color-scheme: dark)" />
+    {[latin, latinExt, vietnamese].map((href) => (
+      <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
+    ))}
   </head>
   <body>
     <Cursor />

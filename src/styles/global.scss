@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   --color-primary: #271297;
   --color-background: #edecf8;
   --color-caption: #9791c2;
@@ -20,8 +21,9 @@ body {
   @media (pointer: fine) {
     cursor: none;
   }
-  * {
-    color: var(--color-primary);
+  color: var(--color-primary);
+  a {
+    color: inherit;
   }
   b {
     font-weight: 500;
