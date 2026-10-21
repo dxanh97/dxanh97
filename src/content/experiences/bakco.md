@@ -6,9 +6,9 @@ start: '2017-11'
 end: '2020-09'
 ---
 
-Developed **Hospital Management** module to help hospitals easily manage their internal resources and connect with others using only one centralized platform.
+Developed the **Hospital Management** module, enabling hospitals to manage internal resources and connect with partners through a single centralized platform.
 
-Led Front-End team of 2 to develop several apps, such as:
+Led a front-end team of two in building several applications, including:
 
-- **PHR (Personal Health Records)** allow users to track their medical records and body indexes.
-- **CDS (Control Disease System)** for **HCDC (HCMC Center for Disease Control)** to record and manage Covid-19 infection chains in HCM city.
+- **PHR (Personal Health Records)**: enables users to track their medical records and body metrics.
+- **CDS (Control Disease System)** for **HCDC (HCMC Center for Disease Control)**: records and manages Covid-19 infection chains in Ho Chi Minh City.

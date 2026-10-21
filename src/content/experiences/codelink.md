@@ -5,10 +5,10 @@ companyUrl: https://www.codelink.io/
 start: '2020-10'
 ---
 
-Updated the company's website and add a CI config to build and deploy automatically using CircleCI. Set up all tracking flows for the website using Google Analytics dashboards. Used Strapi to set up a headless CMS for managing CodeLink's Playbook.
+Updated the company website and configured CircleCI for automated builds and deployments. Implemented website tracking and analytics dashboards in Google Analytics. Deployed Strapi as a headless CMS to manage CodeLink's Playbook.
 
-Outsourced for **Electronic Arts** to help build an admin dashboard that manages marketing assets (videos, images, etc.) and utilized Machine Learning, Serverless, and NestJS to create audience-targeted marketing videos.
+Delivered outsourced work for **Electronic Arts**: built an admin dashboard for managing marketing assets (videos, images, etc.), and used machine learning, serverless architecture, and NestJS to generate audience-targeted marketing videos.
 
-Used React, Redux, Firebase, and GitHub Actions to create an annotation tool for preparing audio data for a Machine Learning model to produce a Text-to-Speech service.
+Built an annotation tool with React, Redux, Firebase, and GitHub Actions to prepare audio data for a machine learning model that powers a text-to-speech service.
 
-Outsourced for **BAL (Berry Appleman & Leiden LLP)** to help maintain and develop new features to manage and handle immigration legal documents using React, .NET, and AWS.
+Delivered outsourced work for **BAL (Berry Appleman & Leiden LLP)**: maintained the platform and developed new features for managing immigration legal documents, using React, .NET, and AWS.
