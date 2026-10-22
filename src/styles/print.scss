@@ -47,6 +47,7 @@
       margin: 0;
       overflow: visible;
       clip: auto;
+      clip-path: none;
       white-space: normal;
     }
   }
@@ -64,7 +65,7 @@
     padding: 0 !important;
   }
 
-  aside {
+  .sidebar {
     display: contents !important;
     position: static !important;
   }

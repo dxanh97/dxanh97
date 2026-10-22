@@ -13,9 +13,12 @@
   if (
     $wrapper &&
     !$wrapper.dataset.ready &&
-    matchMedia('(pointer: fine)').matches
+    matchMedia('(pointer: fine)').matches &&
+    !matchMedia('(forced-colors: active)').matches
   ) {
     $wrapper.dataset.ready = '';
+    // Hides the native cursor (global.scss) now that this one runs.
+    document.documentElement.dataset.cursor = '';
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
     // Time constants (seconds): the ring trails, the dot nearly tracks.
@@ -144,6 +147,12 @@
   @media (prefers-reduced-motion: reduce) {
     [data-cursor='ring'] span {
       transition: none;
+    }
+  }
+  /* System colours replace ours, so keep the native cursor. */
+  @media (forced-colors: active) {
+    .cursor-wrapper {
+      display: none;
     }
   }
 </style>

@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+  # Run by deploy.yml before every deploy.
+  workflow_call:
 
 permissions:
   contents: read

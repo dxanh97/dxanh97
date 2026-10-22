@@ -20,7 +20,8 @@ import { Icon } from 'astro-icon/components';
 </button>
 
 <script>
-  const colors = { light: '#fafafa', dark: '#0a0a0a' };
+  import { themeColors } from '@/data/theme';
+
   const root = document.documentElement;
   const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
 
@@ -47,7 +48,7 @@ import { Icon } from 'astro-icon/components';
     }
     document
       .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
-      .forEach((meta) => (meta.content = colors[next]));
+      .forEach((meta) => (meta.content = themeColors[next]));
     label();
   };
 
@@ -103,7 +104,7 @@ import { Icon } from 'astro-icon/components';
     background: var(--bg);
     color: var(--muted);
     font: inherit;
-    font-size: 16.25px;
+    font-size: var(--text-sm);
     &:hover {
       border-color: var(--accent);
       color: var(--accent);

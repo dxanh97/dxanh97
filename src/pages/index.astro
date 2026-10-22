@@ -11,21 +11,21 @@ const command = 'curl https://dxanh97.dev';
 ---
 
 <BaseLayout>
-  <div class="wrap" data-stream>
+  <main class="wrap" data-stream>
     <p class="prompt command" data-clear aria-hidden="true">
       <span class="tilde">~</span> $ <span data-type>{command}</span>
     </p>
-    <aside>
+    <div class="sidebar">
       <About />
       <Techs techList={techs} />
       <div class="interests">
         <Interests interestList={interests} />
       </div>
-    </aside>
-    <main>
+    </div>
+    <div class="career">
       <Experiences />
-    </main>
-  </div>
+    </div>
+  </main>
 </BaseLayout>
 
 <style lang="scss">
@@ -48,7 +48,7 @@ const command = 'curl https://dxanh97.dev';
   }
   /* Sticky only where the whole column fits on screen; otherwise its
      bottom would stay hidden until the page ends. */
-  aside {
+  .sidebar {
     align-self: start;
     @media (min-width: 901px) and (min-height: 1080px) {
       position: sticky;
@@ -77,7 +77,7 @@ const command = 'curl https://dxanh97.dev';
       display: block;
     }
   }
-  main {
+  .career {
     min-width: 0;
     @media (max-width: 900px) {
       margin-top: 16px;

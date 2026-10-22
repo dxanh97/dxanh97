@@ -34,7 +34,9 @@ const printContact = [
 <p class="prompt" aria-hidden="true">
   <span class="tilde">~</span> $ whoami
 </p>
-<h1 class="name">{name}</h1>
+<h1 class="name" lang="vi">
+  {name}
+</h1>
 <p class="role">
   <span aria-hidden="true"># </span>
   {role}
@@ -56,20 +58,30 @@ const printContact = [
 <section class="block">
   <Prompt command="cat about.txt" label="About" />
   <div class="intro">
-    <Content yearsOfExperience={new Date().getFullYear() - careerStart} />
+    <Content
+      careerStart={careerStart}
+      yearsOfExperience={new Date().getFullYear() - careerStart}
+    />
   </div>
 </section>
+<script is:inline>
+  // The build-time years of experience go stale between deploys; this
+  // keeps them current, with the built value as the no-JS fallback.
+  document.querySelectorAll('[data-since]').forEach(function (el) {
+    el.textContent = new Date().getFullYear() - Number(el.dataset.since);
+  });
+</script>
 
 <style lang="scss">
   .name {
     margin: 0 0 16px;
-    font-size: 40px;
-    font-weight: 750;
+    font-size: 2.5rem;
+    font-weight: 700;
     line-height: 1;
     letter-spacing: -0.05em;
     text-transform: lowercase;
     @media (max-width: 900px) {
-      font-size: 36px;
+      font-size: 2.25rem;
     }
   }
   .role {
@@ -89,7 +101,7 @@ const printContact = [
       padding: 4px 8px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      font-size: 16.25px;
+      font-size: var(--text-sm);
       text-decoration: none;
       text-transform: lowercase;
       &:hover {

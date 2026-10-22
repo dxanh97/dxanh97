@@ -22,7 +22,9 @@ const experienceList = await Promise.all(
       return (
         <li class:list={['entry', { current: !end }]}>
           <p class="meta">
-            <time datetime={start}>{start}</time> →{' '}
+            <time datetime={start}>{start}</time>{' '}
+            <span aria-hidden="true">→</span>
+            <span class="sr-only">to</span>{' '}
             {end ? <time datetime={end}>{end}</time> : 'now'}
           </p>
           <h3>
@@ -71,12 +73,12 @@ const experienceList = await Promise.all(
   .meta {
     margin: 0;
     color: var(--accent);
-    font-size: 16.25px;
+    font-size: var(--text-sm);
   }
   h3 {
     margin: 4px 0 12px;
-    font-size: 25px;
-    font-weight: 650;
+    font-size: 1.5625rem;
+    font-weight: 700;
     line-height: 1.35;
     letter-spacing: -0.02em;
     text-transform: lowercase;

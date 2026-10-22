@@ -6,14 +6,33 @@ import '@/styles/print.scss';
 import Cursor from '@/components/Cursor.astro';
 import Stream from '@/components/Stream.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
-import latin from '@fontsource/space-mono/files/space-mono-latin-400-normal.woff2?url';
-import latinExt from '@fontsource/space-mono/files/space-mono-latin-ext-400-normal.woff2?url';
-import vietnamese from '@fontsource/space-mono/files/space-mono-vietnamese-400-normal.woff2?url';
+import { getEntry } from 'astro:content';
+import { themeColors } from '@/data/theme';
+// Body text is 400 latin. The name is bold and needs all three bold
+// subsets (Đ is latin-ext, ặ is Vietnamese), which would otherwise be found
+// only after styles are computed.
+import latin400 from '@fontsource/space-mono/files/space-mono-latin-400-normal.woff2?url';
+import latin700 from '@fontsource/space-mono/files/space-mono-latin-700-normal.woff2?url';
+import latinExt700 from '@fontsource/space-mono/files/space-mono-latin-ext-700-normal.woff2?url';
+import vietnamese700 from '@fontsource/space-mono/files/space-mono-vietnamese-700-normal.woff2?url';
 
-const title = '<dxanh97 />';
+const profile = await getEntry('profile', 'profile');
+if (!profile) throw new Error('Missing src/content/profile.mdx');
+const { name, role, github, linkedin } = profile.data;
+
+const title = `${name} · ${role}`;
 const description =
   'Software Engineer specializing in JavaScript and TypeScript.';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name,
+  jobTitle: role,
+  url: Astro.site?.href,
+  sameAs: [github, linkedin],
+};
 ---
 
 <html lang="en">
@@ -22,6 +41,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -29,25 +49,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="theme-color"
-      content="#fafafa"
+      content={themeColors.light}
       media="(prefers-color-scheme: light)"
     />
     <meta
       name="theme-color"
-      content="#0a0a0a"
+      content={themeColors.dark}
       media="(prefers-color-scheme: dark)"
     />
-    {[latin, latinExt, vietnamese].map((href) => (
+    {[latin400, latin700, latinExt700, vietnamese700].map((href) => (
       <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
     ))}
-    <script is:inline>
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script is:inline define:vars={{ themeColors }}>
       try {
         const theme = localStorage.theme;
         if (theme === 'light' || theme === 'dark') {
           document.documentElement.dataset.theme = theme;
-          const color = theme === 'dark' ? '#0a0a0a' : '#fafafa';
+          const color = themeColors[theme];
           document
             .querySelectorAll('meta[name="theme-color"]')
             .forEach(function (meta) {
@@ -59,12 +85,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       }
     </script>
     <script is:inline>
-      // Hide the page until Stream.astro prints it. Never with reduced
-      // motion or for automated audits (which would measure text mid-fade),
-      // and show everything if the stream has not started in 3s.
+      // Hide the page until Stream.astro prints it. Only once per tab
+      // session, never with reduced motion or for automated audits (which
+      // would measure text mid-fade), and show everything if the stream has
+      // not started in 3s. `?stream` forces it, so tests can exercise it.
+      let seen = false;
+      try {
+        seen = sessionStorage.streamed === '1';
+      } catch {
+        // storage unavailable; always stream
+      }
+      const forced = new URLSearchParams(location.search).has('stream');
       if (
-        !matchMedia('(prefers-reduced-motion: reduce)').matches &&
-        !navigator.webdriver
+        forced ||
+        (!seen &&
+          !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+          !navigator.webdriver)
       ) {
         const root = document.documentElement;
         root.dataset.boot = '';

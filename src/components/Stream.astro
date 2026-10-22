@@ -29,21 +29,37 @@
   // An empty `data-boot` means the head script's fallback has not fired yet.
   if (root.dataset.boot === '' && stream && caret) {
     root.dataset.boot = 'streaming';
+    try {
+      sessionStorage.streamed = '1';
+    } catch {
+      // storage unavailable
+    }
 
     // Text inside `data-type` is typed a character at a time; everything
     // else streams a word at a time. Icons count as words.
     type Token = { el: Element; kind: 'element' | 'word' | 'char'; at: number };
     const tokens: Token[] = [];
+    // Items moved down with CSS `order` (the interests, in one column)
+    // stream after the rest, so the caret follows what is on screen.
+    const reordered: Token[] = [];
     const words: HTMLSpanElement[] = [];
-    const walk = (el: Element, typed: boolean) => {
+    const walk = (el: Element, typed: boolean, out: Token[]) => {
       const isIcon = el instanceof SVGElement;
-      tokens.push({ el, kind: isIcon ? 'word' : 'element', at: 0 });
+      out.push({ el, kind: isIcon ? 'word' : 'element', at: 0 });
       if (isIcon) return;
       for (const node of [...el.childNodes]) {
         if (node instanceof Element) {
           if (node.classList.contains('sr-only')) continue;
-          if (!node.getClientRects().length) continue;
-          walk(node, typed || node.hasAttribute('data-type'));
+          const style = getComputedStyle(node);
+          // `display: contents` (the sidebar in one column) has no box of
+          // its own, but its children do.
+          if (!node.getClientRects().length && style.display !== 'contents')
+            continue;
+          walk(
+            node,
+            typed || node.hasAttribute('data-type'),
+            out === tokens && style.order !== '0' ? reordered : out,
+          );
         } else if (node instanceof Text && node.data.trim()) {
           // Split before each run of spaces so the caret sits on the word,
           // and after hyphens and slashes so no word wraps across lines (a
@@ -54,7 +70,7 @@
           const spans = parts.map((part) => {
             const span = document.createElement('span');
             span.textContent = part;
-            tokens.push({ el: span, kind: typed ? 'char' : 'word', at: 0 });
+            out.push({ el: span, kind: typed ? 'char' : 'word', at: 0 });
             words.push(span);
             return span;
           });
@@ -62,7 +78,8 @@
         }
       }
     };
-    walk(stream, false);
+    walk(stream, false, tokens);
+    tokens.push(...reordered);
 
     // Schedule each token in ms from the start. Words before the command
     // (its prompt) appear at once; elements appear with their next token.
